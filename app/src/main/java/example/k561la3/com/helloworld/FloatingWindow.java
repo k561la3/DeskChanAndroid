@@ -1,20 +1,18 @@
 package example.k561la3.com.helloworld;
 
-import android.app.Activity;
+
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
-import android.view.Display;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,8 +22,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 
 /**
@@ -33,12 +29,20 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
  */
 
 public class FloatingWindow extends Service{
+
+
+
+
+
+
+
     int screenHeight = MainActivity.height;
     int screenWidth = MainActivity.width;
     private int rotation;
+    private MainMessageManager messageManager = new MainMessageManager();
 
 
-//-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
     private WindowManager movableTyan;
     private LinearLayout movableTyanLayout;
     private Button stop;
@@ -49,6 +53,10 @@ public class FloatingWindow extends Service{
 
     private WindowManager cloudWindow, textWindow;
     private LinearLayout cloudWindowLayout, textWindowLayout;
+
+
+    public Handler handler = new Handler();
+
 
     @Nullable
     @Override
@@ -63,10 +71,10 @@ public class FloatingWindow extends Service{
     public void onCreate() {
         super.onCreate();
 
+
+
 //-------------------------------------------------------------------------------
-
-
-
+        this.registerReceiver(messageManager,new IntentFilter("com.k561la3.action.GUI_SAY"));
 
 
         //create gui elements
@@ -100,15 +108,18 @@ public class FloatingWindow extends Service{
         cloudWindowLayout = new LinearLayout(this);
         textWindowLayout = new LinearLayout(this);
         final TextView textView = new TextView(this);
-        textView.setText("ЭТО\nТЕКСТ");
-        textView.setTextColor(Color.argb(255,250,50,50));
+        final LinearLayout.LayoutParams cloudParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         final LinearLayout.LayoutParams textWindowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        textView.setText("Это текст, который должна говорить тян");
+        textView.setTextColor(Color.argb(255,250,50,50));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP,(float) 7.0);
         textWindowLayout.setLayoutParams(textWindowParams);
         final WindowManager.LayoutParams textWindowLayoutParams = new WindowManager.LayoutParams(100, 100, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         textWindowLayout.addView(textView);
 
         //create layout
-        final LinearLayout.LayoutParams cloudParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         cloudWindowLayout.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.cloud));
         cloudWindowLayout.setLayoutParams(cloudParams);
 
@@ -128,6 +139,9 @@ public class FloatingWindow extends Service{
 
         textWindow.addView(textWindowLayout,textWindowLayoutParams);
         CLOUD_EXISTS = true;
+
+
+
 
         //--------------------------------------------------------------------
 
@@ -179,6 +193,7 @@ public class FloatingWindow extends Service{
                         ntext.x = fieldParams.x + 30;
                         ntext.y = fieldParams.y + 20;
                         textWindow.updateViewLayout(textWindowLayout,ntext);
+
                         break;
                 }
                 return false;
@@ -233,7 +248,11 @@ public class FloatingWindow extends Service{
 
 //---------------------------------------------------------------------------
 
+
+
     }
+
+
 
 
 
@@ -247,11 +266,19 @@ public class FloatingWindow extends Service{
     }
 
 //---------------------------------------------------------------------------
-    public void setImage(Drawable drawable){
+
+
+
+
+
+
+
+    public void setImage(int drawable){
 
     }
 
-    public void showText(CharSequence text){
+    public void say(String text){
+
 
     }
 
