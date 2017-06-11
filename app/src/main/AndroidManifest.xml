@@ -21,7 +21,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".FloatingWindow" />
+        <service android:name=".FloatingWindow">
+        <action android:name="example.k561la3.com.helloworld.MY_SERVICE"/>
+            </service>
 
         <receiver
             android:name=".MainMessageManager"

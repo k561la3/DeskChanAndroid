@@ -1,5 +1,19 @@
 <resources>
+
+
+        <string-array name="planets_array">
+            <item>Happy</item>
+            <item>Excited</item>
+            <item>Grin</item>
+            <item>Love</item>
+            <item>Scared</item>
+            <item>Shocked</item>
+            <item>Shy</item>
+        </string-array>
+
     <string name="app_name">DeskChan</string>
     <string name="show_ballon">Start widget</string>
-    <string name="send_shit">send "shit"</string>
+    <string name="send_shit">send data</string>
+
+
 </resources>
